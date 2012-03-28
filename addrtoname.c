@@ -1183,6 +1183,7 @@ init_ipxsaparray(void)
 	}
 }
 
+/* this will rewrite by dove
 const char *
 ipproto_string(u_char proto)
 {
@@ -1201,10 +1202,11 @@ ipproto_string(u_char proto)
 	tp->name = strdup(buf);
 	return (tp->name);
 }
+*/
 
 //add by dove
 static char *ip_proto_table[] ={
-	""		// dummy for IP 				(00)
+	"unknown"	// dummy for IP 				(00)
 	"ICMP",		// control message protocol - RFC792
 	"IGMP",		// group mgmt protocol - RFC1112
 	"GGP",		// gateway^2 (deprecated) - RFC823
@@ -1345,6 +1347,17 @@ static char *ip_proto_table[] ={
 	//"AX4000",	// AX/4000 Testblock - non IANA (173)
 	//"NCS_HEARTBEAT",// Novell NCS Heartbeat - http://support.novell.com/cgi-bin/search/searchtid.cgi?/10071158.htm (224)
 };
+
+const char *
+ipproto_string(u_char proto) // rewrite by dove
+{
+	char buf[sizeof("00000")];
+	if (proto > sizeof(ip_proto_table) || proto < 1) {
+		snprintf(buf, sizeof(buf), "%u", proto-1);
+		return strdup(buf);
+	}
+	return ip_proto_table[proto-1];
+}
 
 static void
 init_iprotoarray(void)
