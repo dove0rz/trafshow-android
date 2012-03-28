@@ -1,0 +1,27 @@
+Version 5.2.1 at Jul 21 10:55:23 NOVST 2004
+-------------------------------------------
+
+* The first public version released!
+  Version 5 of the program is the Next Generation trafshow project
+  writen from scratch. No any shared codes with the previous versions.
+  The TrafShow Application Architecture has been specially designed
+  to handle a lot of traffic capture sources with the huge amount of
+  exported network flows. There are no such network throughput which
+  contents could not be displayed ;-)
+
+
+Version 5.2.2 at Jan  8 12:34:34 NOVT 2006
+------------------------------------------
+
+* The sources was cleaned for new version of gcc 4.0. No complains
+  any more. No other improvements has been made.
+
+
+Version 5.2.3 at Mar 12 15:04:12 NOVT 2006
+------------------------------------------
+
+* Significant improvement for *BSD packets capturing scheme using
+  libpcap version 0.8 capabilities (pcap_get_selectable_fd() function).
+* Bug-fix against core dumps on the list of interfaces with aliases
+  and so on.
+
