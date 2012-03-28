@@ -8,7 +8,7 @@
  */
 
 #ifdef	HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include <sys/types.h>
@@ -16,7 +16,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <arpa/nameser.h>
+//#include <arpa/nameser.h>
+#include "nameser_compat.h"
+#include "nameser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

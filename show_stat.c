@@ -8,7 +8,7 @@
  */
 
 #ifdef	HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include <sys/param.h>
@@ -174,7 +174,7 @@ ip_print(ver, proto, addr, dst, size)
 			sprintf(pb, "%d", ntohs(addr->ip_port));
 			cp = pb;
 		}
-		buf[0] = ',';
+		buf[0] = ':'; // by dove
 		(void)strncpy(&buf[1], cp, 10);
 		buf[11] = '\0';
 		len = strlen(buf);

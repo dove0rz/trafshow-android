@@ -8,7 +8,7 @@
  */
 
 #ifdef	HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #ifdef	HAVE_SLCURSES
@@ -281,7 +281,7 @@ show_dump_close()
 	}
 
 	if (live_pcap_thr) {
-		pthread_cancel(*live_pcap_thr);
+		//pthread_cancel(*live_pcap_thr); //bionic have no pthread_cancel, disabled by dove
 		free(live_pcap_thr);
 		live_pcap_thr = 0;
 	}

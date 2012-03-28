@@ -8,7 +8,7 @@
  */
 
 #ifdef	HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include <sys/types.h>
@@ -40,7 +40,7 @@
 #define	ASYNC_MODE	FNDELAY
 #elif	O_ASYNC
 #define	ASYNC_MODE	O_ASYNC
-#elif
+#else
 #error the fcntl argument to turn ON/OFF non-blocking I/O is unknown
 #endif
 

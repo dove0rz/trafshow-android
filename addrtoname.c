@@ -56,6 +56,7 @@ static const char rcsid[] _U_ =
 
 #include <pcap.h>
 #include <pcap-namedb.h>
+#include <netdb.h>
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
@@ -1201,9 +1202,155 @@ ipproto_string(u_char proto)
 	return (tp->name);
 }
 
+//add by dove
+static char *ip_proto_table[] ={
+	""		// dummy for IP 				(00)
+	"ICMP",		// control message protocol - RFC792
+	"IGMP",		// group mgmt protocol - RFC1112
+	"GGP",		// gateway^2 (deprecated) - RFC823
+	"IPv4",		// IP header
+	"Stream",	// Stream - RFC1190, RFC1819
+	"TCP",		// TCP - RFC792
+	"CBT",		// CBT - <A.Ballardie@cs.ucl.ac.uk>
+	"EGP",		// exterior gateway protocol - RFC888
+	"IGP",		// any private interior gateway protocol
+	"BBN_RCC", 	// BBN RCC Monitoring 				(10)
+	"NVPII",	// Network Voice Protocol - RFC741
+	"PUP",		// PUP
+	"ARGUS",	// ARGUS
+	"EMCON", 	// EMCON
+	"XNET",		// Cross net debugger - IEN158
+	"CHAOS", 	// CHAOS
+	"UDP",		// user datagram protocol - RFC768
+	"MUX", 		// multiplexing - IEN90
+	"DCNMEAS",	// DCN Measurement Subsystems
+	"HMP",		// Host Monitoring - RFC869			(20)
+	"PRM",		// Packet radio measurement
+	"IDP",		// xns idp
+	"TRUNK1",
+	"TRUNK2",
+	"LEAF1",
+	"LEAF2",
+	"RDP", 		// Reliable Data Protocol - RFC908
+	"IRT",		// Internet Reliable Transation - RFC938
+	"TP",		// tp-4 w/ class negotiation - RFC905
+	"BULK",		// Bulk Data Transfer Protocol - RFC969		(30)
+	"MFE_NSP",	// MFE Network Services Protocol
+	"MERIT",	// MERIT Internodal Protocol
+	"DCCP",		// Datagram Congestion Control Protocol
+	"3PC",		// Third party connect protocol
+	"IDPR",		// Interdomain policy routing protocol
+	"XTP",		// XTP
+	"DDP",		// Datagram Delivery Protocol
+	"CMTP",		// Control Message Transport Protocol
+	"TPPP",		// TP++ Transport Protocol
+	"IL",		// IL Transport Protocol			(40)
+	"IPv6",		// IP6 header
+	"SDRP",		// Source demand routing protocol
+	"IP6ROUTING",	// IP6 routing header
+	"IP6FRAGMENT",	// IP6 fragmentation header
+	"IDRP",		// Inter-Domain Routing Protocol
+	"RSVP",		// Resource ReSerVation protocol
+	"GRE",		// General Routing Encapsulation
+	"MHRP",		// Mobile Host Routing Protocol
+	"BNA",		// BNA
+	"ESP",		// Encap Security Payload for IPv6 - RFC2406	(50)
+	"AH",		// Authentication Header for IPv6 - RFC2402
+	"INSLP",	// Integrated Net Layer Security
+	"SWIPE",	// IP with Encryption
+	"NARP",		// NBMA Address resolution protocol - RFC1735
+	"MOBILE",	// IP Mobility
+	"TLSP",		// Transport Layer Security Protocol using
+	"SKIP",		// SKIP
+	"ICMP6",	// ICMP6  - RFC1883
+	"IP6NONE",	// IP6 no next header - RFC1883
+	"IP6DSTOPTS",	// IP6 destination options - RFC1883		(60)
+	"Reserved",	// 61 is reserved by IANA for any host internal protocol
+	"MIPV6_OLD",	// Mobile IPv6
+	"Reserved",	// 63 is reserved by IANA for any local network
+	"SATEXPAK",
+	"KRYPTOLAN",
+	"RVD",		// MIT Remote virtual disk protocol
+	"IPPC",		// Internet Pluribus Packet Core
+	"Reserved",	// 68 is reserved by IANA for any distributed file system
+	"SATMON",	// SATNET Monitoring
+	"VISA",		// VISA Protocol				(70)
+	"IPCV",		// Internet Packet Core Utility
+	"CPNX",		// Computer Protocol Network Executive
+	"CPHB",		// Computer Protocol Heart Beat
+	"WSN",		// WANG Span Network
+	"PVP",		// Packet Video Protocol
+	"BRSATMON",	// Backroon SATNET Monitoring
+	"SUNND",	// SUN ND Protocol - Temporary
+	"WBMON",	// Wideband Monitoring
+	"WBEXPAK",	// Wideband EXPAK
+	"EON",		// ISO cnlp					(80)
+	"VMTP"          
+	"SVMTP",	// Secure VMTP
+	"VINES",	// Vines over raw IP
+	"TTP"           
+	"NSFNETIGP",	// NSFNET IGP
+	"DGP",		// Dissimilar Gateway Protocol
+	"TCF",
+	"EIGRP"		
+	"OSPF",		// OSPF Interior Gateway Protocol - RFC1583
+	"SPRITE",	// SPRITE RPC protocol				(90)
+	"LARP",		// Locus Address Resolution Protocol
+	"MTP",		// Multicast Transport Protocol
+	"AX25",		// AX.25 frames
+	"IPINIP",	// IP within IP Encapsulation protocol
+	"MICP",		// Mobile Internetworking Control Protocol
+	"SCCCP",	// Semaphore communications security protocol
+	"ETHERIP",	// Ethernet-within-IP - RFC 3378
+	"ENCAP",	// encapsulation header - RFC1241
+	"Reserved", 	// 99 is reserved by IANA for any private encryption scheme
+	"GMTP",		//						(100)
+	"IFMP",		// Ipsilon flow management protocol
+	"PNNI",		// PNNI over IP
+	"PIM",		// Protocol Independent Mcast
+	"ARIS",	
+	"SCPS",	
+	"QNX",	
+	"AN",		// Active Networks
+	"IPCOMP",	// IP payload compression - RFC2393
+	"SNP",		// Sitara Networks Protocol
+	"COMPAQ",	// Compaq Peer Protocol				(110)
+	"IPX",		// IPX over IP
+	"VRRP",		// Virtual Router Redundancy Protocol
+	"PGM",		// Pragmatic General Multicast
+	"Reserved",	// 114 is reserved by IANA for any zero hop protocol
+	"L2TP",		// Layer Two Tunnelling Protocol
+	"DDX",		// D-II Data Exchange
+	"IATP",		// Interactive Agent Transfer Protocol
+	"STP",		// Schedule Transfer Protocol
+	"SRP",		// Spectralink Radio Protocol
+	"UTI",		// 						(120)
+	"SMP",		// Simple Message Protocol
+	"SM",		// 
+	"PTP",		// Performance Transparency Protocol
+	"ISIS",		// ISIS over IPv4
+	"FIRE",		// 
+	"CRTP",		// Combat Radio Transport Protocol
+	"CRUDP",	// Combat Radio User Datagram
+	"SSCOPMCE",	// 
+	"IPLT",		// 
+	"SPS",		// Secure Packet Shield				(130)
+	"PIPE",		// Private IP Encapsulation within IP
+	"SCTP",		// Stream Control Transmission Protocol
+	"FC",		// Fibre Channel
+	"RSVPE2EI",	// RSVP E2E Ignore - RFC3175
+	"MIPV6",	// Mobile IPv6 
+	"UDPLITE",	// Lightweight user datagram protocol - RFC3828
+	"MPLS_IN_IP",	// MPLS in IP - RFC4023
+	//"AX4000",	// AX/4000 Testblock - non IANA (173)
+	//"NCS_HEARTBEAT",// Novell NCS Heartbeat - http://support.novell.com/cgi-bin/search/searchtid.cgi?/10071158.htm (224)
+};
+
 static void
 init_iprotoarray(void)
 {
+	return; // bionic have no getprotoent/endprotoent, disabled by dove
+	/*
 	struct protoent *pe;
 	register struct hnamemem *tp;
 	register u_int32_t i;
@@ -1217,7 +1364,7 @@ init_iprotoarray(void)
 		tp->addr = i;
 		tp->nxt = newhnamemem();
 	}
-	endprotoent();
+	endprotoent();*/
 }
 
 static struct tok icmp_db[] = {

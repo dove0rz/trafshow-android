@@ -8,7 +8,7 @@
  */
 
 #ifdef	HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #ifdef	HAVE_SLCURSES
@@ -21,7 +21,7 @@
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #ifdef	HAVE_SYS_TERMIOS_H
-#include <sys/termios.h>
+#include <asm/termios.h> // sys/termios => asm/termios, by dove
 #endif
 #include <fcntl.h>
 #include <stdio.h>

@@ -16,6 +16,7 @@
 
 #include <sys/types.h>
 #include <netinet/in.h>
+#include "nameser_compat.h"
 
 #define	NAMESERVER_TIMEOUT	10	/* awaiting reply in seconds */
 #define	NAMESERVER_RETRIES	3	/* max number of retries */
